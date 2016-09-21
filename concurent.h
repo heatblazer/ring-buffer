@@ -8,6 +8,10 @@ class Mutex;
 class Thread;
 
 
+/// compare and swap threads IDs to retireve
+/// who has the lock
+/// \brief The SpinLock class
+///
 class SpinLock
 {
 public:
@@ -15,7 +19,9 @@ public:
     ~SpinLock(){}
     void lock()
     {
-        while (!__sync_bool_compare_and_swap(&m_lock, 0, 1))
+        m_lock = pthread_self();
+
+        while (!__sync_bool_compare_and_swap(&m_lock, m_lock, 0))
         {
             sched_yield();
         }
@@ -27,7 +33,7 @@ public:
     }
 
 private:
-    volatile int m_lock;
+    volatile pthread_t m_lock;
 };
 
 
