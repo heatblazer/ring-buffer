@@ -21,8 +21,8 @@ public:
     ~A(){}
     void produce(int data)
     {
-//        m_lock.lock();
         LockGuard<Mutex> lck(m_mutex);
+//        m_lock.lock();
         g_ring.write(data);
 //        m_lock.unlock();
     }
@@ -62,7 +62,7 @@ static void* cbA(void* data)
 {
     static int i = 0;
     A* a = (A*) data;
-    while(i < 100) {
+    while(i < 10000) {
         a->produce(i);
         i++;
     }
@@ -87,18 +87,18 @@ int main(int argc, char *argv[])
     (void) argv;
 #ifdef PARALEL_TEST
 
-    A a[10];
+    A a[1];
     B b;
 
-    Thread producers[10];
+    Thread producers[1];
     Thread consumer;
 
-    for(int i=0; i < 10; i++) {
+    for(int i=0; i < 1; i++) {
         producers[i].create(0, 0, &cbA, &a[i]);
     }
     consumer.create(0, 0, &cbB, &b);
 
-    for(int i=0; i < 10; i++) {
+    for(int i=0; i < 1; i++) {
         producers[i].join();
     }
 

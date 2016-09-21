@@ -54,7 +54,7 @@ public:
 
     ~RingBuffer()
     {
-
+        delete m_buff;
     }
 
     void deleteme()
@@ -127,13 +127,17 @@ private:
 
     int _busy_blockR()
     {
-        int busy_index = (m_tail - RW.read_head);
+        // [0][0][0][RW.w][0][0][0]
+        // <-------> index <------>
+        int busy_index = (RW.read_head - m_head);
         return busy_index;
     }
 
     int _busy_blockW()
     {
-        int busy_index = (m_tail - RW.read_head);
+        // [0][0][0][RW.w][0][0][0]
+        // <-------> index <------>
+        int busy_index = (RW.write_head - m_head);
         return busy_index;
     }
 
