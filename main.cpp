@@ -60,7 +60,7 @@ static void* cbA(void* data)
 {
     static int i = 0;
     A* a = (A*) data;
-    while(i < 640) {
+    while(i < 10) {
         a->produce(i);
         i++;
     }
@@ -84,21 +84,23 @@ int main(int argc, char *argv[])
     (void) argc;
     (void) argv;
 #ifdef PARALEL_TEST
-    A a1, a2;
 
+    A a[10];
     B b;
 
-    Thread t1, t2;
-    Thread t3;
+    Thread producers[10];
+    Thread consumer;
 
-    t1.create(0, 0, cbA, &a1);
-    t2.create(0,0, cbA, &a2);
-    t3.create(0, 0, cbB, &b);
+    for(int i=0; i < 10; i++) {
+        producers[i].create(0, 0, &cbA, &a[i]);
+    }
+    consumer.create(0, 0, &cbB, &b);
 
+    for(int i=0; i < 10; i++) {
+        producers[i].join();
+    }
 
-    t1.join();
-    t2.join();
-    t3.join();
+    consumer.join();
 
 #elif  SIMPLE_TEST
     RingBuffer<int> rb(20, 20);
