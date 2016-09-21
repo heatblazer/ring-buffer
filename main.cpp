@@ -21,12 +21,14 @@ public:
     ~A(){}
     void produce(int data)
     {
-        m_lock.lock();
+//        m_lock.lock();
+        LockGuard<Mutex> lck(m_mutex);
         g_ring.write(data);
-        m_lock.unlock();
+//        m_lock.unlock();
     }
 
     SpinLock m_lock;
+    Mutex m_mutex;
 
 };
 
@@ -60,7 +62,7 @@ static void* cbA(void* data)
 {
     static int i = 0;
     A* a = (A*) data;
-    while(i < 10) {
+    while(i < 100) {
         a->produce(i);
         i++;
     }
