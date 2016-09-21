@@ -118,17 +118,23 @@ private:
         }
     }
 
+
+    /// read/write head difference
+    /// negative - read head is ahead
+    /// null - they are at the same point
+    /// positive - write head is ahead
+    /// \brief _RWDifference
+    /// \return
+    ///
     int _RWDifference()
     {
-        // -1 read is ahead, 0 they are matched, +1
-        // write is ahead
         return (RW.write_head - RW.read_head);
     }
 
     int _busy_blockR()
     {
         // [0][0][0][RW.w][0][0][0]
-        // <-------> index <------>
+        // <---busy---> index
         int busy_index = (RW.read_head - m_head);
         return busy_index;
     }
@@ -136,7 +142,7 @@ private:
     int _busy_blockW()
     {
         // [0][0][0][RW.w][0][0][0]
-        // <-------> index <------>
+        // <---busy---> index
         int busy_index = (RW.write_head - m_head);
         return busy_index;
     }
