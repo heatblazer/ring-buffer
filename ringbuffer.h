@@ -54,7 +54,10 @@ public:
 
     ~RingBuffer()
     {
-        delete m_buff;
+        if (m_buff) {
+            delete m_buff;
+            m_buff = nullptr;
+        }
     }
 
     void deleteme()

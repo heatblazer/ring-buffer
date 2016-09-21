@@ -12,8 +12,12 @@ using namespace std;
 static int g_controll = 1;
 #define PARALEL_TEST 1
 
+// ringbuffer to test //
 static RingBuffer<int> g_ring(10, 10);
 
+/// Producer thread
+/// \brief The A class
+///
 class A
 {
 public:
@@ -22,9 +26,9 @@ public:
     void produce(int data)
     {
         LockGuard<Mutex> lck(m_mutex);
-//        m_lock.lock();
+      //  m_lock.lock();
         g_ring.write(data);
-//        m_lock.unlock();
+     //   m_lock.unlock();
     }
 
     SpinLock m_lock;
@@ -33,6 +37,9 @@ public:
 };
 
 
+/// Consumer thread
+/// \brief The B class
+///
 class B
 {
 public:
@@ -40,6 +47,7 @@ public:
     ~B(){}
     void consume()
     {
+        LockGuard<Mutex> lck(m_mutex);
         int data=0;
         g_ring.read(&data);
 
@@ -55,6 +63,7 @@ public:
     }
 
     std::vector<int> m_data;
+    Mutex m_mutex;
 
 };
 
@@ -62,7 +71,7 @@ static void* cbA(void* data)
 {
     static int i = 0;
     A* a = (A*) data;
-    while(i < 10000) {
+    while(i < 0x123456) {
         a->produce(i);
         i++;
     }
@@ -87,18 +96,18 @@ int main(int argc, char *argv[])
     (void) argv;
 #ifdef PARALEL_TEST
 
-    A a[1];
+    A a[100];
     B b;
 
-    Thread producers[1];
+    Thread producers[100];
     Thread consumer;
 
-    for(int i=0; i < 1; i++) {
+    for(int i=0; i < 100; i++) {
         producers[i].create(0, 0, &cbA, &a[i]);
     }
     consumer.create(0, 0, &cbB, &b);
 
-    for(int i=0; i < 1; i++) {
+    for(int i=0; i < 100; i++) {
         producers[i].join();
     }
 
