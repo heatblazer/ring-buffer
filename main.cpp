@@ -136,12 +136,6 @@ int main(int argc, char *argv[])
         list.append(i);
     }
 
-    int* a = 0;
-    list.toArray(&a);
-    for(int i=0; i < 10; i++) {
-        std::cout << "A: " << a[i] << std::endl;
-    }
-
     list.print();
 #else
 

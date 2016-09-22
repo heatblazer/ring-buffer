@@ -34,7 +34,7 @@ template <class T> class List
     };
 
 public:
-    List() : m_head(nullptr), m_tail(nullptr), m_size(0)
+    List() : m_head(nullptr), m_size(0)
     {
     }
 
@@ -63,6 +63,12 @@ public:
         return ret;
     }
 
+
+    T pop_back()
+    {
+        // TODO
+    }
+
     void append(const T data)
     {
         if (m_head == nullptr) {
@@ -76,6 +82,7 @@ public:
             it->next = new item_t;
             it->next->data = data;
             it->next->next = nullptr;
+
         }
     }
 
@@ -121,7 +128,6 @@ private:
 
 private:
     item_t* m_head;
-    item_t* m_tail;
     unsigned int m_size;
 };
 
