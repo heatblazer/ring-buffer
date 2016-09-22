@@ -72,7 +72,7 @@ static void* cbA(void* data)
 {
     static int i = 0;
     A* a = (A*) data;
-    while(i < 1000) {
+    while(i < 100000) {
         a->produce(i);
         i++;
     }
@@ -98,18 +98,18 @@ int main(int argc, char *argv[])
     (void) argv;
 #ifdef PARALEL_TEST
 
-    A a[10];
+    A a[100];
     B b;
 
-    Thread producers[10];
+    Thread producers[100];
     Thread consumer;
 
-    for(int i=0; i < 10; i++) {
+    for(int i=0; i < 100; i++) {
         producers[i].create(0, 0, &cbA, &a[i]);
     }
     consumer.create(0, 0, &cbB, &b);
 
-    for(int i=0; i < 10; i++) {
+    for(int i=0; i < 100; i++) {
         producers[i].join();
     }
 
