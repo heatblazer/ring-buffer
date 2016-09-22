@@ -26,6 +26,49 @@ private:
 
 
 
+template <class T> class List
+{
+    struct item_t {
+        T* data;
+        item_t* next;
+    };
+
+public:
+    List()
+    {
+        m_head = m_tail = nullptr;
+    }
+
+    ~List()
+    {
+        _cleanup();
+    }
+
+    void push(const T& data)
+    {
+        item_t* item = new item_t;
+        item->data = *data;
+        item->next = m_head;
+        m_head = item;
+    }
+
+private:
+    void _cleanup()
+    {
+        for(item_t* it = m_head; it != NULL; )
+        {
+            item_t* tmp = it;
+            it = it->next;
+            delete tmp;
+        }
+    }
+
+private:
+    item_t* m_head;
+    item_t* m_tail;
+
+};
+
 /** Track based buffer, can read into 2D tracks
  * for optimized RW operations
  */
