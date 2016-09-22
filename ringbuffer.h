@@ -29,14 +29,13 @@ private:
 template <class T> class List
 {
     struct item_t {
-        T* data;
+        T data;
         item_t* next;
     };
 
 public:
-    List()
+    List() : m_head(nullptr), m_tail(nullptr), m_size(0)
     {
-        m_head = m_tail = nullptr;
     }
 
     ~List()
@@ -44,12 +43,69 @@ public:
         _cleanup();
     }
 
-    void push(const T& data)
+    void push(const T data)
     {
+        m_size++;
         item_t* item = new item_t;
-        item->data = *data;
+        item->data = data;
         item->next = m_head;
         m_head = item;
+    }
+
+    T   pop()
+    {
+        item_t* rem = m_head;
+        T ret = rem->data;
+        m_head = m_head->next;
+        delete rem;
+        m_size--;
+
+        return ret;
+    }
+
+    void append(const T data)
+    {
+        if (m_head == nullptr) {
+            push(data);
+        } else {
+            m_size++;
+            item_t* it = m_head;
+            while (it->next != nullptr) {
+                it = it->next;
+            }
+            it->next = new item_t;
+            it->next->data = data;
+            it->next->next = nullptr;
+        }
+    }
+
+
+    unsigned int toArray(T** ret)
+    {
+        item_t* it = m_head;
+        T* arr = new T[m_size];
+        T* ait = arr;
+        memset(arr, 0, m_size);
+        while (it != NULL) {
+            *ait++ = it->data;
+            it = it->next;
+        }
+        for(int i=0; i < m_size; i++) {
+            std::cout << "[" << arr[i] << "]";
+        }
+        std::cout << "\n";
+        (*ret) = arr;
+        return m_size; // arr size for iterratuon
+    }
+
+    // test function //
+    void print()
+    {
+        for(item_t* it=m_head; it != NULL; it = it->next)
+        {
+            std::cout << "[" <<(it->data) << "]" ;
+        }
+        std::cout << "\n";
     }
 
 private:
@@ -66,7 +122,7 @@ private:
 private:
     item_t* m_head;
     item_t* m_tail;
-
+    unsigned int m_size;
 };
 
 /** Track based buffer, can read into 2D tracks

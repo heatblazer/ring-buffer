@@ -10,7 +10,7 @@
 using namespace std;
 
 static int g_controll = 1;
-#define PARALEL_TEST 1
+#define LIST_TEST 1
 
 // ringbuffer to test //
 static RingBuffer<int> g_ring(10, 10);
@@ -130,6 +130,19 @@ int main(int argc, char *argv[])
         printf("[%d]", arr[i]);
     }
     puts("");
+#elif LIST_TEST
+    List<int> list;
+    for(int i=0; i < 10; i++) {
+        list.append(i);
+    }
+
+    int* a = 0;
+    list.toArray(&a);
+    for(int i=0; i < 10; i++) {
+        std::cout << "A: " << a[i] << std::endl;
+    }
+
+    list.print();
 #else
 
 #endif
