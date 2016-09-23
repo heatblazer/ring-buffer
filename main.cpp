@@ -131,11 +131,18 @@ int main(int argc, char *argv[])
     }
     puts("");
 #elif LIST_TEST
+
     List<int> list;
-    for(int i=0; i < 10; i++) {
+    for(int i=0; i < 30; i++) {
         list.append(i);
     }
 
+    int* arr = new int[30];
+    unsigned size = list.toArray(&arr);
+    for(int i=0; i < size; i++) {
+        std::cout << "(" << arr[i] << ")";
+    }
+    std::cout << "\n\n";
     list.print();
 #else
 

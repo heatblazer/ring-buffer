@@ -34,7 +34,7 @@ template <class T> class List
     };
 
 public:
-    List() : m_head(nullptr), m_size(0)
+    List() : m_head(nullptr), m_tail(nullptr), m_size(0)
     {
     }
 
@@ -43,14 +43,6 @@ public:
         _cleanup();
     }
 
-    void push(const T data)
-    {
-        m_size++;
-        item_t* item = new item_t;
-        item->data = data;
-        item->next = m_head;
-        m_head = item;
-    }
 
     T   pop()
     {
@@ -64,26 +56,16 @@ public:
     }
 
 
-    T pop_back()
-    {
-        // TODO
-    }
 
     void append(const T data)
     {
-        if (m_head == nullptr) {
-            push(data);
-        } else {
-            m_size++;
-            item_t* it = m_head;
-            while (it->next != nullptr) {
-                it = it->next;
-            }
-            it->next = new item_t;
-            it->next->data = data;
-            it->next->next = nullptr;
 
+        if (m_head == nullptr) {
+            m_head = (m_tail = new_item(data, m_head));
+            return;
         }
+        m_tail->next = new_item(data, m_tail->next);
+        m_tail = m_tail->next;
     }
 
 
@@ -116,6 +98,16 @@ public:
     }
 
 private:
+
+    item_t* new_item(const T data, item_t* link)
+    {
+        item_t* i = new item_t;
+        i->data = data;
+        i->next = link;
+        m_size++;
+        return i;
+    }
+
     void _cleanup()
     {
         for(item_t* it = m_head; it != NULL; )
@@ -128,6 +120,7 @@ private:
 
 private:
     item_t* m_head;
+    item_t* m_tail;
     unsigned int m_size;
 };
 
