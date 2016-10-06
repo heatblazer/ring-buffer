@@ -37,7 +37,19 @@ private:
 };
 
 
-class Mutex
+template <typename T> class AbstractMutex
+{
+public:
+    AbstractMutex(){ }
+    virtual ~AbstractMutex() = default;
+    virtual void lock() = 0;
+    virtual void unlock() = 0;
+protected:
+    T m_mutex;
+};
+
+
+class Mutex : public AbstractMutex<pthread_mutex_t>
 {
 public:
     Mutex();
@@ -45,9 +57,8 @@ public:
     void lock();
     void unlock();
 
-
 private:
-    pthread_mutex_t m_mutex;
+
     pthread_mutexattr_t m_attr;
 };
 

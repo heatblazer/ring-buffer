@@ -203,7 +203,6 @@ private:
     void _advance_write_head()
     {
 
-
         if (RW.write_head != m_tail) {
             RW.write_head++;
         } else {
@@ -215,7 +214,7 @@ private:
     {
 
         if (RW.read_head != m_tail) {
-            RW.read_head++ ;
+            RW.read_head++;
         } else {
             RW.read_head = (T*) m_head;
         }

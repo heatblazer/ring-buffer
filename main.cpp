@@ -72,7 +72,7 @@ static void* cbA(void* data)
 {
     static int i = 0;
     A* a = (A*) data;
-    while(i < 100) {
+    while(i < 10) {
         a->produce(i);
         i++;
     }
